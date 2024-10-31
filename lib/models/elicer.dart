@@ -34,6 +34,34 @@ class Elicer {
     currentStatus = Status.checkOut; // 상태를 퇴근으로 변경
     checkOutTime = DateTime.now(); // 현재 시간을 퇴근 시간으로 설정
   }
+
+  // Map으로 변환하는 메서드
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'className': className,
+      'currentStatus': currentStatus == Status.checkIn ? 1 : 0,
+      'lateCount': lateCount,
+      'checkInTime': checkInTime?.toIso8601String(),
+      'checkOutTime': checkOutTime?.toIso8601String(),
+    };
+  }
+
+  // Map에서 객체로 변환하는 메서드
+  static Elicer fromMap(Map<String, dynamic> map) {
+    return Elicer(
+      name: map['name'],
+      currentStatus:
+          map['currentStatus'] == 1 ? Status.checkIn : Status.checkOut,
+      lateCount: map['lateCount'],
+      checkInTime: map['checkInTime'] != null
+          ? DateTime.parse(map['checkInTime'])
+          : null,
+      checkOutTime: map['checkOutTime'] != null
+          ? DateTime.parse(map['checkOutTime'])
+          : null,
+    );
+  }
 }
 
 // 9명의 엘리서 목록을 생성하는 함수
